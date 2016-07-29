@@ -24,10 +24,9 @@ public class ProjectManController {
         return projectdao.readAll();
     }
     
-    public boolean createProject(String name)
+    public boolean createProject(Project project)
     {
-        Project pro = new Project(name);
-        if(projectdao.create(pro)){
+        if(projectdao.create(project)){
             return true;
         }
         else {

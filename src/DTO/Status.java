@@ -48,5 +48,8 @@ public class Status {
         this.workflow = workflow;
     }
     
-    
+       @Override
+    public String toString() {
+        return name;
+    }
 }

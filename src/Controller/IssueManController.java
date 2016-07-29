@@ -6,10 +6,24 @@
 
 package Controller;
 
+import DAO.IssueDAO;
+import DAO.IssueLogDAO;
+import DTO.Issue;
+import DTO.IssueLog;
+import java.util.ArrayList;
+
 /**
  *
  * @author Francisco
  */
 public class IssueManController {
+    IssueLogDAO  issuelogdao = new IssueLogDAO();
+    IssueDAO issuedao = new IssueDAO();
+
+    public IssueManController() {
+    }
     
+    public ArrayList<Issue> fetchIssues(){
+        return issuedao.readAll();
+    }
 }

@@ -18,6 +18,7 @@ import java.util.logging.Logger;
  * @author Francisco
  */
 import DTO.User;
+import java.util.ArrayList;
 public class UserDAO {
         private static final String SQL_READ = "SELECT id, name, username, "
             + "password, role_id FROM user WHERE id = ?";
@@ -46,12 +47,34 @@ public class UserDAO {
             }
             return dto; 
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
             con.desconectar();
         }
         return dto;
+    }
+         
+         public ArrayList<User> readAll() {
+         PreparedStatement ps;
+         User dto = null;
+         RoleDAO role = new RoleDAO();
+         ArrayList<User> arr = new ArrayList<User>();
+        try {
+            ps = con.getConexion().prepareStatement(SQL_READALL);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+               dto = new User(rs.getInt(1),rs.getString(2),rs.getString(3),rs.getString(4),role.read(rs.getInt(5)));
+               arr.add(dto);
+            }
+            return arr; 
+        } catch (SQLException ex) {
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        finally{
+            con.desconectar();
+        }
+        return arr;
     }
     
         
@@ -71,7 +94,7 @@ public class UserDAO {
             }
             return dto; 
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
             con.desconectar();
@@ -94,7 +117,7 @@ public class UserDAO {
             }
             return hash; 
         } catch (SQLException ex) {
-            Logger.getLogger(User.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(UserDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
         finally{
             con.desconectar();

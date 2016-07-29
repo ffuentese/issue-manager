@@ -13,14 +13,18 @@ package DTO;
 public class Project {
     private int id;
     private String name;
+    private Workflow workflow;
 
     public Project() {
     }
 
-    public Project(int id, String name) {
+    public Project(int id, String name, Workflow workflow) {
         this.id = id;
         this.name = name;
+        this.workflow = workflow;
     }
+    
+    
 
     public Project(String name) {
         this.name = name;
@@ -45,6 +49,21 @@ public class Project {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Workflow getWorkflow() {
+        return workflow;
+    }
+
+    public void setWorkflow(Workflow workflow) {
+        this.workflow = workflow;
+    }
+    
+    
+
+    @Override
+    public String toString() {
+        return name;
     }
     
     

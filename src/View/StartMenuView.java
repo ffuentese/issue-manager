@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package View;
 
 import DTO.User;
@@ -11,13 +10,17 @@ import java.beans.PropertyVetoException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 /**
  *
  * @author Francisco
  */
 public class StartMenuView extends javax.swing.JInternalFrame {
-public User loguser;
+
+    public User loguser;
+
     /**
      * Creates new form StartMenuView
      */
@@ -45,8 +48,18 @@ public User loguser;
         jLabel1.setText("System functions:");
 
         btnCreateIssue.setText("Create Issue");
+        btnCreateIssue.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateIssueActionPerformed(evt);
+            }
+        });
 
         btnManIssues.setText("Manage Issues");
+        btnManIssues.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManIssuesActionPerformed(evt);
+            }
+        });
 
         btnManProjects.setText("Manage Projects");
         btnManProjects.addActionListener(new java.awt.event.ActionListener() {
@@ -111,7 +124,7 @@ public User loguser;
 
     private void btnManProjectsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManProjectsActionPerformed
         // TODO add your handling code here:
-        if(loguser.getRole().getId() == 2){
+        if (loguser.getRole().getId() == 2) {
             JOptionPane.showMessageDialog(null, "You are not allowed to perform this action.");
         } else {
             ProjectManView pro = new ProjectManView(loguser);
@@ -127,7 +140,7 @@ public User loguser;
 
     private void btnManUsersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManUsersActionPerformed
         // TODO add your handling code here:
-        if(loguser.getRole().getId() != 1){
+        if (loguser.getRole().getId() != 1) {
             JOptionPane.showMessageDialog(null, "You are not allowed to perform this action.");
         } else {
             ManUsersView muv = new ManUsersView(loguser);
@@ -143,7 +156,7 @@ public User loguser;
 
     private void btnManWorkflowsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManWorkflowsActionPerformed
         // TODO add your handling code here:
-        if(loguser.getRole().getId() == 2){
+        if (loguser.getRole().getId() == 2) {
             JOptionPane.showMessageDialog(null, "You are not allowed to perform this action.");
         } else {
             ManWorkflowsView mwv = new ManWorkflowsView(loguser);
@@ -156,6 +169,30 @@ public User loguser;
             }
         }
     }//GEN-LAST:event_btnManWorkflowsActionPerformed
+
+    private void btnCreateIssueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateIssueActionPerformed
+        // TODO add your handling code here:
+        IssueCreateView icv = new IssueCreateView(loguser);
+        getParent().add(icv);
+        icv.setVisible(true);
+        try {
+            icv.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(StartMenuView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCreateIssueActionPerformed
+
+    private void btnManIssuesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManIssuesActionPerformed
+        // TODO add your handling code here:
+        IssueManView imv = new IssueManView(loguser);
+        getParent().add(imv);
+        imv.setVisible(true);
+        try {
+            imv.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(StartMenuView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnManIssuesActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

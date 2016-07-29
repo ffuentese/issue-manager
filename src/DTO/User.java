@@ -75,6 +75,11 @@ public String encrypt(String password){
     String result = DigestUtils.sha1Hex(password);
     return result;
 }
+
+    @Override
+    public String toString() {
+        return name;
+    }
     
     
 

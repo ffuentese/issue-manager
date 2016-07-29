@@ -6,7 +6,12 @@
 package View;
 
 import Controller.ProjectManController;
+import DAO.ProjectDAO;
+import DAO.WorkflowDAO;
+import DTO.Project;
 import DTO.User;
+import DTO.Workflow;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
@@ -18,8 +23,9 @@ import javax.swing.table.DefaultTableModel;
 public class ProjectManView extends javax.swing.JInternalFrame {
 
     public User loguser;
+    public WorkflowDAO workflowdao;
     ProjectManController pmc = new ProjectManController();
-    String col[] = {"Id", "Name"};
+    String col[] = {"Id", "Name", "Workflow"};
     DefaultTableModel tablemodel = new DefaultTableModel(col, 0);
 
     /**
@@ -30,6 +36,10 @@ public class ProjectManView extends javax.swing.JInternalFrame {
         loguser = user;
         this.fillTable();
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        workflowdao = new WorkflowDAO();
+        DefaultComboBoxModel modelProject;
+        modelProject = new DefaultComboBoxModel(workflowdao.readAll().toArray());
+        cbWorkflow.setModel(modelProject);
 
     }
 
@@ -47,6 +57,8 @@ public class ProjectManView extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         btnMenu1 = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        cbWorkflow = new javax.swing.JComboBox();
 
         btnMenu.setText("Add a new Project");
         btnMenu.addActionListener(new java.awt.event.ActionListener() {
@@ -72,20 +84,29 @@ public class ProjectManView extends javax.swing.JInternalFrame {
             }
         });
 
+        jLabel1.setText("When adding a new project use this workflow");
+
+        cbWorkflow.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnMenu)
+                            .addGap(60, 60, 60)
+                            .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnMenu1))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnMenu)
-                        .addGap(60, 60, 60)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnMenu1))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cbWorkflow, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(34, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -93,7 +114,11 @@ public class ProjectManView extends javax.swing.JInternalFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cbWorkflow, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnMenu)
                     .addComponent(btnMenu1)
@@ -106,8 +131,12 @@ public class ProjectManView extends javax.swing.JInternalFrame {
 
     private void btnMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMenuActionPerformed
         // TODO add your handling code here:
+        Project pro = new Project();
         String name = JOptionPane.showInputDialog("Please name the new project");
-        if (pmc.createProject(name)) {
+        Workflow workflow = ((Workflow)cbWorkflow.getSelectedItem());
+        pro.setName(name);
+        pro.setWorkflow(workflow);
+        if (pmc.createProject(pro)) {
             JOptionPane.showMessageDialog(null, "Project added");
             this.reset();
             this.fillTable();
@@ -142,7 +171,9 @@ public class ProjectManView extends javax.swing.JInternalFrame {
     private void fillTable() {
         if (pmc.fetchProjects().size() > 0) {
             for (int i = 0; i < pmc.fetchProjects().size(); i++) {
-                String[] linea = {Integer.toString(pmc.fetchProjects().get(i).getId()), pmc.fetchProjects().get(i).getName()};
+                String[] linea = {Integer.toString(pmc.fetchProjects().get(i).getId()), 
+                    pmc.fetchProjects().get(i).getName(), 
+                    pmc.fetchProjects().get(i).getWorkflow().getName()};
                 tablemodel.addRow(linea);
             }
         }
@@ -156,6 +187,8 @@ public class ProjectManView extends javax.swing.JInternalFrame {
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnMenu;
     private javax.swing.JButton btnMenu1;
+    private javax.swing.JComboBox cbWorkflow;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

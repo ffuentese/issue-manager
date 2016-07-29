@@ -3,27 +3,35 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package DTO;
+import java.util.Date;
 
 /**
  *
  * @author Francisco
  */
 public class IssueLog {
+
     private int id;
-    private String name;
-    private String message;
+    private String description;
     private Issue issue;
+    private Status status;
+    private Date date;
+    private User asignee;
+    private int priority;
+    
 
     public IssueLog() {
     }
 
-    public IssueLog(int id, String name, String message, Issue issue) {
+    public IssueLog(int id, String description, Issue issue, Status status, Date date, User asignee, int priority) {
         this.id = id;
-        this.name = name;
-        this.message = message;
+        this.description = description;
         this.issue = issue;
+        this.status = status;
+        this.date = date;
+        this.asignee = asignee;
+        this.priority = priority;
     }
 
     public int getId() {
@@ -34,20 +42,12 @@ public class IssueLog {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Issue getIssue() {
@@ -57,6 +57,38 @@ public class IssueLog {
     public void setIssue(Issue issue) {
         this.issue = issue;
     }
-    
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public User getAsignee() {
+        return asignee;
+    }
+
+    public void setAsignee(User asignee) {
+        this.asignee = asignee;
+    }
+
+    public int getPriority() {
+        return priority;
+    }
+
+    public void setPriority(int priority) {
+        this.priority = priority;
+    }
+
     
 }

@@ -70,11 +70,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Create Issue"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateIssueActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnManIssues">
       <Properties>
         <Property name="text" type="java.lang.String" value="Manage Issues"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManIssuesActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnManProjects">
       <Properties>

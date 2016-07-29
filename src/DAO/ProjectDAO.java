@@ -7,6 +7,7 @@
 package DAO;
 
 import DTO.Project;
+import DTO.Workflow;
 import conn.Connector;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,10 +21,10 @@ import java.util.logging.Logger;
  * @author Francisco
  */
 public class ProjectDAO {
-     private static final String SQL_READ = "SELECT id, name, username, "
-            + "password, role_id FROM user WHERE id = ?";
-        private static final String SQL_READALL = "SELECT id, name FROM project";        
-        private static final String SQL_CREATE = "INSERT INTO project (name) VALUES (?)";
+     private static final String SQL_READ = "SELECT id, name, workflow_id "
+            + "FROM project WHERE id = ?";
+        private static final String SQL_READALL = "SELECT id, name, workflow_id FROM project";        
+        private static final String SQL_CREATE = "INSERT INTO project (name, workflow_id) VALUES (?, ?)";
         private static final String SQL_DELETE = "DELETE FROM project where id = ?";
         
         private static final Connector con = Connector.getConnection();
@@ -31,6 +32,7 @@ public class ProjectDAO {
          public Project read(Object key) {
          PreparedStatement ps;
          Project dto = null;
+         WorkflowDAO workflowdao = new WorkflowDAO();
         try {
 
             ps = con.getConexion().prepareStatement(SQL_READ);
@@ -38,7 +40,7 @@ public class ProjectDAO {
             
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-               dto = new Project(rs.getInt(1),rs.getString(2));
+               dto = new Project(rs.getInt(1),rs.getString(2), workflowdao.read(rs.getInt(3)));
             }
             return dto; 
         } catch (SQLException ex) {
@@ -54,13 +56,14 @@ public class ProjectDAO {
          PreparedStatement ps;
          Project dto = null;
          ArrayList<Project> arr = new ArrayList<Project>();
+         WorkflowDAO workflowdao = new WorkflowDAO();
         try {
 
             ps = con.getConexion().prepareStatement(SQL_READALL);
             
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-               dto = new Project(rs.getInt(1),rs.getString(2));
+               dto = new Project(rs.getInt(1),rs.getString(2), workflowdao.read(rs.getInt(3)));
                arr.add(dto);
             }
             return arr; 
@@ -82,7 +85,9 @@ public class ProjectDAO {
             String sqlcreate = SQL_CREATE;
             ps = con.getConexion().prepareStatement(sqlcreate);
             p_name = project.getName();
+            int p_work = project.getWorkflow().getId();
             ps.setString(1, p_name);
+            ps.setInt(2, p_work);
             
             if(ps.executeUpdate()>0){
            

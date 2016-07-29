@@ -14,22 +14,20 @@ import java.util.Date;
  */
 public class Issue {
     private int id;
-    private Status status;
+    private String name;
     private User creator;
     private Project project;
-    private String description;
     private Date date;
     private User owner;
 
     public Issue() {
     }
 
-    public Issue(int id, Status status, User creator, Project project, String description, Date date, User owner) {
+    public Issue(int id, String name, User creator, Project project, Date date, User owner) {
         this.id = id;
-        this.status = status;
+        this.name = name;
         this.creator = creator;
         this.project = project;
-        this.description = description;
         this.date = date;
         this.owner = owner;
     }
@@ -42,12 +40,12 @@ public class Issue {
         this.id = id;
     }
 
-    public Status getStatus() {
-        return status;
+    public String getName() {
+        return name;
     }
 
-    public void setStatus(Status status) {
-        this.status = status;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public User getCreator() {
@@ -66,14 +64,6 @@ public class Issue {
         this.project = project;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -89,6 +79,5 @@ public class Issue {
     public void setOwner(User owner) {
         this.owner = owner;
     }
-    
-    
+
 }

@@ -6,10 +6,20 @@
 
 package Controller;
 
+import DTO.Issue;
+
 /**
  *
  * @author Francisco
  */
 public class IssueCreateController {
+
+    public IssueCreateController() {
+    }
+    
+    public boolean createIssue(Issue issue){
+        
+        return true;
+    }
     
 }
