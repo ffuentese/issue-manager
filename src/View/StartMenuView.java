@@ -44,6 +44,7 @@ public class StartMenuView extends javax.swing.JInternalFrame {
         btnManProjects = new javax.swing.JButton();
         btnManUsers = new javax.swing.JButton();
         btnManWorkflows = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         jLabel1.setText("System functions:");
 
@@ -82,6 +83,13 @@ public class StartMenuView extends javax.swing.JInternalFrame {
             }
         });
 
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -98,7 +106,8 @@ public class StartMenuView extends javax.swing.JInternalFrame {
                             .addComponent(btnManUsers, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnManProjects, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnManIssues, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCreateIssue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(btnCreateIssue, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLogout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(143, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -116,7 +125,9 @@ public class StartMenuView extends javax.swing.JInternalFrame {
                 .addComponent(btnManUsers)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnManWorkflows)
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnLogout)
+                .addContainerGap(46, Short.MAX_VALUE))
         );
 
         pack();
@@ -143,7 +154,7 @@ public class StartMenuView extends javax.swing.JInternalFrame {
         if (loguser.getRole().getId() != 1) {
             JOptionPane.showMessageDialog(null, "You are not allowed to perform this action.");
         } else {
-            ManUsersView muv = new ManUsersView(loguser);
+            UserManView muv = new UserManView(loguser);
             getParent().add(muv);
             muv.setVisible(true);
             try {
@@ -194,9 +205,22 @@ public class StartMenuView extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_btnManIssuesActionPerformed
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        LoginView login = new LoginView();
+        getParent().add(login);
+        login.setVisible(true);
+        try {
+            login.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(StartMenuView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateIssue;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnManIssues;
     private javax.swing.JButton btnManProjects;
     private javax.swing.JButton btnManUsers;

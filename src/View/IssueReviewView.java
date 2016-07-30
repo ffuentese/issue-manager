@@ -6,20 +6,64 @@
 
 package View;
 
+import Controller.IssueReviewController;
+import DTO.Issue;
+import DTO.IssueLog;
+import DTO.Status;
+import DTO.User;
+import java.util.Date;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Francisco
  */
 public class IssueReviewView extends javax.swing.JInternalFrame {
-
+private User loguser;
+private IssueReviewController irc = new IssueReviewController();
+DefaultComboBoxModel modelStatus,modelUsers;
+    String col[] = {"Id", "Description", "Issue #", "Status", "Date", "Priority"};
+    DefaultTableModel tablemodel = new DefaultTableModel(col, 0);
     /**
      * Creates new form IssueReviewView
      */
-    public IssueReviewView() {
+    public IssueReviewView(User user, Issue issue) {
         initComponents();
+        loguser = user;
         this.setTitle("Review Issue");
+        lblId.setText(Integer.toString(issue.getId()));
+        lblCreator.setText(issue.getCreator().getName());
+        lblProject.setText(issue.getProject().getName());
+        lblOwner.setText(issue.getOwner().getName());
+        modelUsers = new DefaultComboBoxModel(irc.fetchUsers().toArray());
+        cbAssignee.setModel(modelUsers);
+        modelStatus = new DefaultComboBoxModel(irc.fetchStatus(issue.getProject()).toArray());
+        cbStatus.setModel(modelStatus);
+        cbAssignee.setSelectedItem(irc.fetchIssueLog(issue.getId()).getAsignee().getName());
+        cbStatus.setSelectedItem(irc.fetchIssueLog(issue.getId()).getStatus().getName());
+        spPriority.setValue(irc.fetchIssueLog(issue.getId()).getPriority());
+        txaDescription.setText(irc.fetchIssueLog(issue.getId()).getDescription());
+        jTable1.setModel(tablemodel);
+        this.fillTable(issue.getId());
     }
+    
+    
 
+    private void fillTable(int issue) {
+        if (irc.fetchIssueLogs(issue).size() > 0) {
+            for (int i = 0; i < irc.fetchIssueLogs(issue).size(); i++) {
+                String[] linea = {Integer.toString(irc.fetchIssueLogs(issue).get(i).getId()),
+                    irc.fetchIssueLogs(issue).get(i).getDescription(),
+                    Integer.toString(irc.fetchIssueLogs(issue).get(i).getIssue().getId()),
+                irc.fetchIssueLogs(issue).get(i).getStatus().getName(),
+                irc.fetchIssueLogs(issue).get(i).getDate().toString(),
+                Integer.toString(irc.fetchIssueLogs(issue).get(i).getPriority())};
+                tablemodel.addRow(linea);
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -33,7 +77,7 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
         jTable1 = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         lblId = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cbStatus = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         lblCreator = new javax.swing.JLabel();
@@ -50,26 +94,16 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
         jLabel10 = new javax.swing.JLabel();
         spPriority = new javax.swing.JSpinner();
         jLabel9 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnExit = new javax.swing.JButton();
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        jTable1.setModel(tablemodel);
         jScrollPane1.setViewportView(jTable1);
 
         jLabel1.setText("ID");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel3.setText("Status");
 
@@ -95,11 +129,21 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
 
         jLabel9.setText("History");
 
-        jButton1.setText("Save");
+        btnSave.setText("Save");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSaveActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Print");
 
-        jButton3.setText("Back to Menu");
+        btnExit.setText("Back to Menu");
+        btnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExitActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,7 +169,7 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel3)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(64, 64, 64)
@@ -153,12 +197,12 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(lblOwner, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(36, 36, 36)
                         .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(99, Short.MAX_VALUE))
+                        .addComponent(btnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(182, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -171,7 +215,7 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
                             .addComponent(lblId, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,24 +245,46 @@ public class IssueReviewView extends javax.swing.JInternalFrame {
                 .addComponent(jLabel9)
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 117, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
+                    .addComponent(btnSave)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(btnExit))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExitActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnExitActionPerformed
+
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        // TODO add your handling code here:
+        IssueLog issuelog = new IssueLog();
+        issuelog.setDescription(txaDescription.getText());
+        issuelog.setIssue(irc.fetchIssue(Integer.parseInt(lblId.getText())));
+        issuelog.setStatus((Status)cbStatus.getSelectedItem());
+        issuelog.setDate(new Date());
+        issuelog.setAsignee((User)cbAssignee.getSelectedItem());
+        issuelog.setPriority((Integer)spPriority.getValue());
+        if(irc.createLog(issuelog)){
+            JOptionPane.showMessageDialog(null, "Issue updated successfully.");
+        } else {
+            JOptionPane.showMessageDialog(null, "A problem occurred while updating"
+                    + "the issue.");
+        }
+    }//GEN-LAST:event_btnSaveActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnExit;
+    private javax.swing.JButton btnSave;
     private javax.swing.JComboBox cbAssignee;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox cbStatus;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;

@@ -26,4 +26,8 @@ public class IssueManController {
     public ArrayList<Issue> fetchIssues(){
         return issuedao.readAll();
     }
+    
+    public Issue fetchIssue(int i){
+        return issuedao.read(i);
+    }
 }

@@ -84,6 +84,11 @@ public class IssueManView extends javax.swing.JInternalFrame {
         jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         btnReview.setText("Edit/Review");
+        btnReview.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReviewActionPerformed(evt);
+            }
+        });
 
         btnAdd.setText("Add");
         btnAdd.addActionListener(new java.awt.event.ActionListener() {
@@ -147,6 +152,20 @@ public class IssueManView extends javax.swing.JInternalFrame {
             Logger.getLogger(StartMenuView.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnReviewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReviewActionPerformed
+        // TODO add your handling code here:
+        int id = jTable1.getSelectedRow();
+        int val = Integer.parseInt(jTable1.getModel().getValueAt(id, 0).toString());
+        IssueReviewView irv = new IssueReviewView(loguser, imc.fetchIssue(val));
+        getParent().add(irv);
+        irv.setVisible(true);
+        try {
+            irv.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(IssueManView.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnReviewActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
