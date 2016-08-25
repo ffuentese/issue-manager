@@ -11,3 +11,4 @@ Para hacer funcionar este programa, luego de descargar los archivos se debe ejec
 
 Los datos de conexión de la base de datos están parametrizados en el archivo **connection.properties**. Si algo no funciona o hay que cambiar algún parámetro de la conexión se edita directamente en ese archivo de texto. 
 
+También es necesario agregar el usuario de connection.properties a MySQL y darle privilegios para la base de datos del programa. Esto se puede hacer desde PHPMyAdmin.
