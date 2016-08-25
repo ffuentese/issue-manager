@@ -4,7 +4,7 @@
 
 Antes de ejecutar el .jar es necesario extraer todos los archivos de la carpeta. 
 
-Sigue siendo necesario ejecutar el archivo db.sql y crear el usuario de connection.properties antes de ejecutar el programa.
+Sigue siendo necesario ejecutar el archivo db.sql y crear el usuario de connection.properties CON TODOS LOS PRIVILEGIOS SOBRE EL ESQUEMA antes de ejecutar el programa.
 
 
 ========================
