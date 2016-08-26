@@ -48,6 +48,13 @@ public class IssueCreateView extends javax.swing.JInternalFrame {
         modelUsers = new DefaultComboBoxModel(userdao.readAll().toArray());
         cbOwner.setModel(modelUsers);
         cbAssignee.setModel(modelUsers);
+        // fill combobox Status
+        int wflw;
+        StatusDAO statusdao = new StatusDAO();
+        wflw = ((Project)cbProject.getSelectedItem()).getWorkflow().getId();
+        DefaultComboBoxModel modelStatus;
+        modelStatus = new DefaultComboBoxModel(statusdao.readAllWorkflow(wflw).toArray());
+        cbStatus.setModel(modelStatus);
         
     }
     
